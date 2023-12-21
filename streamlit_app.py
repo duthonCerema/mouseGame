@@ -26,7 +26,7 @@ st.set_page_config(
     page_title="The Dungeon", page_icon="🗡️", initial_sidebar_state="collapsed"
 )
 
-@st.cache_resource
+
 def local_css(file_name):
     with open(file_name) as f:
         st.markdown(f"<style>{f.read()}</style>", unsafe_allow_html=True)
@@ -46,7 +46,7 @@ class GameObject:
     Base class for game objects, containing common properties and methods
     for characters and inanimate objects.
     """
-    def __init__(self, x, y, file, base_url):
+    def __init__(self, x, y, file, base_url, text='RIEN', img='RIEN'):
         """
         Initialize a new game object instance.
 
@@ -58,6 +58,8 @@ class GameObject:
         self.x = x
         self.y = y
         self.file = base_url + file
+        self.text = text
+        self.img = img
 
     @property
     def html(self):
@@ -103,7 +105,7 @@ class InanimateObject(GameObject):
     """
     Class representing an inanimate object in the game, inheriting from GameObject.
     """
-    def __init__(self, x, y, file, visible):
+    def __init__(self, x, y, file, visible, text, img='RIEN'):
         """
         Initialize a new inanimate object instance.
 
@@ -113,7 +115,7 @@ class InanimateObject(GameObject):
         :param visible: object's visibility status (True or False)
         """
         base_url = "https://raw.githubusercontent.com/TomJohnH/streamlit-dungeon/main/graphics/tileset/"
-        super().__init__(x, y, file, base_url)
+        super().__init__(x, y, file, base_url, text, img)
         self.visible = visible
 
 
@@ -241,8 +243,8 @@ def fetch_data(level_name):
 def restart_game():
     for key in st.session_state.keys():
         del st.session_state[key]
-    st.rerun()
-    st.rerun()
+    st.experimental_rerun()
+    st.experimental_rerun()
 
 
 # ------------------------------------------------------------
@@ -332,7 +334,9 @@ if "chests" not in st.session_state:
                 x=temp["x"],
                 y=temp["y"],
                 file=temp["file"],
+                text=temp["text"],
                 visible=temp["visible"],
+                img=temp["img"],
             )
         )
 
@@ -401,52 +405,7 @@ if (
 #             Game enigne - frontend html renderer
 #
 # ------------------------------------------------------------
-
-tab1, tab2 = st.tabs(["intro", "start game"])
-
-# ----------------- game start --------
-
-with tab1:
-    st.subheader("| Intro")
-    col1, col2 = st.columns(2, gap="small")
-    with col1:
-        # main_image
-        st.image("graphics/other/dungeon_crawler.png")
-
-        st.caption(
-            "The Dungeon: a streamlit dungeon crawler game", unsafe_allow_html=True
-        )
-    with col2:
-        intro_text = """
-        Explore the depths of an ancient dungeon in the first streamlit-based dungeon crawler game!
-        Navigate through dangerous traps, defeat fearsome monsters and uncover the secrets of the DuNgeOn.
-        With intuitive controls and beautiful graphics, this game will keep you entertained for hours.
-        Experience the thrill of adventure as you progress through levels and uncover powerful treasures.
-        Join the adventure today and become the hero of the dungeon!
-        """
-        st.write(f'<p style="color:#9c9d9f">{intro_text}</p>', unsafe_allow_html=True)
-        audio_file = open("audio/intro.mp3", "rb")
-        audio_bytes = audio_file.read()
-        st.audio(audio_bytes, format="audio/mpeg")
-
-    st.subheader("| Game start")
-    st.write(
-        '<p style="color:#9c9d9f">To start the game go to the "start game" tab. Please be sure to switch to <b>dark mode</b> or the custom theme. The Dungeon is meant to be played in the dark! </p>',
-        unsafe_allow_html=True,
-    )
-    st.subheader("| Controls")
-    st.write(
-        '<p style="color:#9c9d9f">Desktop: please use keyboard arrows | Mobile (Android, Chrome): please use on-screen buttons | iOS: unfortunately, the auto-scrolling feature does not work yet for iOS.</p>',
-        unsafe_allow_html=True,
-    )
-    st.subheader("| Github")
-    st.write(
-        '<p style="color:#9c9d9f">Create your own dungeon! Visit <a href="https://github.com/TomJohnH/streamlit-dungeon">GitHub</a>. Edit your levels with <a href="https://dungeon-editor.streamlit.app/">The Dungeon editor</a>.</p><br>',
-        unsafe_allow_html=True,
-    )
-
-
-with tab2:
+if 1==1:
 
     ####################################################
     #
