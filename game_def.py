@@ -204,16 +204,17 @@ def encounter(player, enemy):
 def treasures(player, treasure):
 
     # if you encounter treasure you will get gold
+    #chest
 
     if player.x == treasure.x and player.y == treasure.y and treasure.visible:
-        gold = randrange(20)
-        st.session_state["bubble_text"] = create_text_bubble_html(
-            "yeah! +" + str(gold) + " g",
+        #gold = randrange(20)
+        st.session_state["bubble_text"] = create_text_bubble_html(treasure.text,
             player.x,
             player.y - 1,
+            treasure.img
         )
         treasure.visible = False
-        player.gold = player.gold + gold
+        #player.gold = player.gold + gold
 
 
 # ------------------------------------------------------------
@@ -325,7 +326,7 @@ def generate_chests_html(chests_list):
 #
 # ------------------------------------------------------------
 
-def create_text_bubble_html(text, x, y):
+def create_text_bubble_html(text, x, y, img= None):
     """Create an HTML text bubble with the given text and position.
 
     Args:
@@ -336,13 +337,24 @@ def create_text_bubble_html(text, x, y):
     Returns:
         A string containing the HTML code for the text bubble.
     """
-    return f"""
-        <div class="container_text" style="position: relative; 
-        grid-column-start: {x}; grid-row-start: {y}; grid-column-end: {x+4};">
-            <img src="https://raw.githubusercontent.com/TomJohnH/streamlit-dungeon/main/graphics/other/message.png">
-            <div style="position: absolute; top: 40%; left: 50%; transform: translate(-50%, -50%); font-size:0.875rem;">{text}</div>
-        </div>
-    """
+    if img is None:
+        return f"""
+            <div class="container_text" style="position: relative; 
+            grid-column-start: {x}; grid-row-start: {y}; grid-column-end: {x+8}; "grid-row-end: {y-3}">
+                <img src="https://raw.githubusercontent.com/duthonCerema/mouseGame/main/graphics/other/message.png">
+                <div style="height: 100%; width: 90%; position: absolute; top: 40%; left: 50%; transform: translate(-45%, -25%); font-size:0.7rem;">{text}</div>
+            </div>
+        """
+    else:
+        return f"""
+            <div class="container_text" style="position: relative; 
+            grid-column-start: {x}; grid-row-start: {y}; grid-column-end: {x+8}; "grid-row-end: {y-3}">
+                <img src="https://raw.githubusercontent.com/duthonCerema/mouseGame/main/graphics/other/message.png">
+                <div style="position: absolute; top: -20%; left: 0%; transform: translate(-100%, -120%); transform: scale(50%, 50%);">
+                <img src="https://raw.githubusercontent.com/duthonCerema/mouseGame/main/graphics/other/{img}"></div>
+            </div>
+        """
+    
 
 
 def get_text_boxes(player_x, player_y, level_name):
